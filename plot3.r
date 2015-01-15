@@ -1,0 +1,18 @@
+hpdata <- read.table("household_power_consumption.txt",sep=";",header=TRUE,colClasses=rep("character",9))
+hpdata$Datetime <- paste(hpdata$Date," ",hpdata$Time)
+hpdata$Date <- as.Date(hpdata$Date,"%d/%m/%Y")
+hpdatasub <- subset(hpdata,Date>="2007-02-01" & Date <="2007-02-02")
+for (i in 3:9) {
+hpdatasub[,i] <- as.numeric(hpdatasub[,i])
+} 
+hpdatasub$Datetime <- strptime(hpdatasub$Datetime,"%d/%m/%Y %H:%M:%S")
+png(file="Plot3.png")
+plot(hpdatasub$Datetime,hpdatasub$Sub_metering_1,type="n",xlab="",ylab="Energy Sub metering",main="")
+points(hpdatasub$Datetime,hpdatasub$Sub_metering_1,pch=20,cex=0.6,col="black")
+lines(hpdatasub$Datetime,hpdatasub$Sub_metering_1,pch=20,cex=0.3,col="black")
+points(hpdatasub$Datetime,hpdatasub$Sub_metering_2,pch=20,cex=0.6,col="red")
+lines(hpdatasub$Datetime,hpdatasub$Sub_metering_2,pch=20,cex=0.6,col="red")
+points(hpdatasub$Datetime,hpdatasub$Sub_metering_3,pch=20,cex=0.3,col="blue")
+lines(hpdatasub$Datetime,hpdatasub$Sub_metering_3,pch=20,cex=0.3,col="blue")
+legend("topright",legend=c("sub_metering_1","sub_metering_2","sub_metering_3"),pch=c(20,20,20),lty=1,col=c("black","red","blue"))
+dev.off()
